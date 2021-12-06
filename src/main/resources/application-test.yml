@@ -1,0 +1,33 @@
+server:
+  port: 19093
+
+eureka:
+  client:
+    serviceUrl: #注册中心的注册地址
+      defaultZone: http://localhost:8090/eureka/
+
+google:
+  driver:
+    path: D:\chromedriver\chromedriver_win32\chromedriver.exe
+
+spring:
+  application:
+    name: gn-reptile
+
+  datasource:
+    url: jdbc:mysql://106.75.115.170:3306/gn-web?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: gwk_632697105qq
+    druid:
+      initial-size: 10
+      min-idle: 40
+      max-active: 80
+      web-stat-filter:
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+      stat-view-servlet:
+        login-username: druid
+        login-password: druid
+
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
