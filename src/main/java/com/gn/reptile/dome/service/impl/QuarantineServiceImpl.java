@@ -55,29 +55,9 @@ public class QuarantineServiceImpl implements QuarantineService {
     }
 
 
-
-
-//    public QuarantineDriver initDriver(){
-//        System.setProperty("webdriver.chrome.driver", path);
-//        ChromeOptions options = new ChromeOptions();
-//        options.setPageLoadStrategy(PageLoadStrategy.EAGER);
-//        LoggingPreferences logPrefs = new LoggingPreferences();
-//        logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
-//        options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
-//        options.setExperimentalOption("useAutomationExtension", false);
-//            chromeDriver = new ChromeDriver(options);
-//            chromeDriver.get("https://pbqc.quotabooking.gov.hk/booking/index_hk_tc.jsp");
-//            windowHandles = chromeDriver.getWindowHandle();
-//            QuarantineDriver qunarDriver = new QuarantineDriver();
-//            qunarDriver.chromeDriver = chromeDriver;
-//            qunarDriver.setWindowHandles(windowHandles);
-//            return qunarDriver;
-//    }
-
-
-
+    @Override
     public void asynProcessing(){
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
         QueryWrapper<Quarantine> wrapper =new QueryWrapper<>();
         List<Integer> flays = new ArrayList<>();
         flays.add(0);
@@ -120,7 +100,8 @@ public class QuarantineServiceImpl implements QuarantineService {
             jse.executeScript("document.getElementById('"+appointment+"').className = 'sp1';");
             logger.info("开始预约点击.....");
             driver.findElementById(appointment).click();
-            this.index_tc_2( driver,jse, quarantine);
+            this.quarantine_2( driver,jse, quarantine);
+
 
             UpdateWrapper<Quarantine> updateWrapper =new UpdateWrapper();
             updateWrapper.lambda().set(Quarantine::getFlay,2)
@@ -154,9 +135,29 @@ public class QuarantineServiceImpl implements QuarantineService {
     }
 
 
+    public void quarantine_2(ChromeDriver driver, JavascriptExecutor jse,Quarantine quarantine){
+        boolean flag = true;
+        while (flag){
+            try {
+                logger.info("执行2......");
+                index_tc_2( driver,  jse, quarantine);
+                logger.info("执行2完成......");
+                this.index_tc_3( driver,jse, quarantine);
+                this.index_tc_4( driver,jse, quarantine);
+                flag = false;
+            }catch (Exception e){
+                //刷新当前页面
+                driver.navigate().refresh();
+                logger.info("重新执行2......异常:{}",e.getMessage());
+                flag = true;
+            }
+        }
+    }
+
+
     public void index_tc_2(ChromeDriver driver, JavascriptExecutor jse,Quarantine quarantine) throws InterruptedException {
 //        String index_tc_2 = "https://pbqc.quotabooking.gov.hk/booking/hk/index_tc.jsp";
-//        driver.navigate().to(index_tc_2);
+//        driver.navigate().to(index_tc_2_url);
         Thread.sleep(2*1000);
         jse.executeScript("document.getElementsByClassName('input-submit-div disable')[0].className = 'input-submit-div';");
 
@@ -192,13 +193,29 @@ public class QuarantineServiceImpl implements QuarantineService {
         driver.findElementById("recaptcha-token").click();
         driver.switchTo().defaultContent(); //回到原来页面
 
-        Thread.sleep(20*1000);
+        Thread.sleep(10*1000);
         //下一步
 //        jse.executeScript("document.getElementsByClassName('input-submit-div disable')[0].className = 'input-submit-div';");
 
         jse.executeScript("document.querySelector('#step_1_booking_form > div.align-right > div:nth-child(1) > input[type=submit]').id = 'abc123456';");
         driver.findElementById("abc123456").click();
-        index_tc_3(driver,jse, quarantine);
+//        index_tc_3(driver,jse, quarantine);
+    }
+
+
+    public void quarantine_3(ChromeDriver driver, JavascriptExecutor jse,Quarantine quarantine){
+        boolean flag = true;
+        while (flag){
+            try {
+                logger.info("执行3......");
+                index_tc_3( driver,  jse, quarantine);
+                logger.info("执行3完成......");
+                flag = false;
+            }catch (Exception e){
+                logger.info("重新执行3......异常:{}",e);
+                flag = true;
+            }
+        }
     }
 
 
@@ -225,7 +242,23 @@ public class QuarantineServiceImpl implements QuarantineService {
         String note_2_confirm ="note_2_confirm";
         WebElement note_2_confirm_web = driver.findElementById(note_2_confirm);
         jse.executeScript("document.getElementById('"+note_2_confirm+"').click()",note_2_confirm_web);
-        index_tc_4( driver, jse, quarantine);
+//        index_tc_4( driver, jse, quarantine);
+    }
+
+
+    public void quarantine_4(ChromeDriver driver, JavascriptExecutor jse,Quarantine quarantine){
+        boolean flag = true;
+        while (flag){
+            try {
+                logger.info("执行4......");
+                index_tc_4( driver,  jse, quarantine);
+                logger.info("执行4完成......");
+                flag = false;
+            }catch (Exception e){
+                logger.info("重新执行4......异常:{}",e);
+                flag = true;
+            }
+        }
     }
 
     public void index_tc_4(ChromeDriver driver, JavascriptExecutor jse,Quarantine quarantine) throws InterruptedException {
