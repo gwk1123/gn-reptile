@@ -55,7 +55,7 @@ public class QuarantineController {
                     }
                 }
             }
-            quarantineService.index_hk_tc_1();
+            quarantineService.asynProcessing();
         } catch (Exception e) {
             log.error("开始预约异常:{}",e);
             throw new RuntimeException("searchError System anomaly");
@@ -70,7 +70,7 @@ public class QuarantineController {
 
     @ApiOperation("初始化浏览器")
     @GetMapping("/init/chrome")
-    public String initChromeDriver(@RequestParam(required = false) String dataDir, @RequestParam(defaultValue = "1") Integer num) {
+    public String initChromeDriver(@RequestParam(required = false) String dataDir, @RequestParam(defaultValue = "3") Integer num) {
         semaphore = new Semaphore(5 * num);
         count = new Semaphore(num);
         quarantineService.initChromeDriver(dataDir, num);

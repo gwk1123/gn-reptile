@@ -1,5 +1,5 @@
 server:
-  port: 19093
+  port: 19097
 
 eureka:
   client:
@@ -15,7 +15,7 @@ spring:
     name: gn-reptile
 
   datasource:
-    url: jdbc:mysql://106.75.115.170:3306/gn-web?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://106.75.115.170:3306/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
     username: root
     password: gwk_632697105qq
     druid:

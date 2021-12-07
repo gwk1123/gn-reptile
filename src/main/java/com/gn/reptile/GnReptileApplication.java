@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 //@EnableEurekaClient
-//@MapperScan({"com.gn.web.sys.mapper", "com.gn.web.manual.mapper"})
+@MapperScan({"com.gn.reptile.dome.manage.mapper"})
 @SpringBootApplication
 public class GnReptileApplication {
 
