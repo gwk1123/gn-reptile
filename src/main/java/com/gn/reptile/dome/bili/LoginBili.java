@@ -58,7 +58,9 @@ public class LoginBili {
 			//等待验证结果
 			Thread.sleep(500);
 			//如果没有出现“验证失败”，说明验证成功，退出循环
-			if(!webDriver.getPageSource().contains("验证失败"))break;
+			if(!webDriver.getPageSource().contains("验证失败")) {
+				break;
+			}
 			//能执行到这里，说明验证失败，刷新以重新验证
 			webDriver.navigate().to("https://passport.bilibili.com/login");
 		}
