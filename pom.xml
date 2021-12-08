@@ -129,6 +129,27 @@
 <!--            <version>2.1.0.RELEASE</version>-->
 <!--        </dependency>-->
 
+
+<!--        <dependency>-->
+<!--            <groupId>org.opencv</groupId>-->
+<!--            <artifactId>opencv</artifactId>-->
+<!--            <version>4.5.4-RELEASE</version>-->
+<!--        </dependency>-->
+
+
+<!--        <dependency>-->
+<!--            <groupId>org.bytedeco.javacpp-presets</groupId>-->
+<!--            <artifactId>opencv</artifactId>-->
+<!--            <version>3.4.3-1.4.3</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.bytedeco.javacpp-presets</groupId>-->
+<!--            <artifactId>opencv-platform</artifactId>-->
+<!--            <version>3.4.3-1.4.3</version>-->
+<!--        </dependency>-->
+
+
         <!--日志包-->
         <dependency>
             <groupId>org.codehaus.janino</groupId>
