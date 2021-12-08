@@ -35,8 +35,12 @@ public class Verify {
 				}
 			}
 			//如果连续三竖列的黑点数超过20，我就认为到达了缺口位置
-			if (sum >= 20)k++;
-			if(k==3)return i;
+			if (sum >= 20) {
+				k++;
+			}
+			if(k==3) {
+				return i;
+			}
 		}
 		return 0;
 	}
