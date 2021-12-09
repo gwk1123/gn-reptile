@@ -112,7 +112,7 @@ public class PictureServiceImpl implements PictureService {
         // 截图
         File file = element.getScreenshotAs(OutputType.FILE);
         // 调整窗口
-        resetWindowSize(driver);
+//        resetWindowSize(driver);
         return file;
     }
 
