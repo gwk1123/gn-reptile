@@ -108,7 +108,7 @@ public class PictureServiceImpl implements PictureService {
      */
     public File localScreenshot(WebDriver driver, WebElement element) {
         // 调整窗口
-        resetWindowSizeToScreenshot(driver);
+//        resetWindowSizeToScreenshot(driver);
         // 截图
         File file = element.getScreenshotAs(OutputType.FILE);
         // 调整窗口
@@ -142,12 +142,36 @@ public class PictureServiceImpl implements PictureService {
         options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
         options.setExperimentalOption("useAutomationExtension", false);
         WebDriver webDriver = new ChromeDriver(options);
-        //打开登陆页面
-        webDriver.get("https://www.baidu.com/");
-        WebElement oneElement = webDriver.findElement(By.xpath("//*[@id=\"su\"]"));
+//        //打开登陆页面
+//        webDriver.get("https://www.baidu.com/");
+//        WebElement oneElement = webDriver.findElement(By.xpath("//*[@id=\"su\"]"));
+//
+//        File file = localScreenshot(webDriver, oneElement);
+//        FileUtils.copyFile(file, new File("D:\\filename", System.currentTimeMillis() + ".png"));
 
-        File file = localScreenshot(webDriver, oneElement);
-        FileUtils.copyFile(file, new File("D:\\filename", System.currentTimeMillis() + ".png"));
+
+//打开登陆页面
+        webDriver.get("https://www.17sucai.com/pins/demo-show?id=31475");
+        //窗口最大化
+//        webDriver.manage().window().maximize();
+        Thread.sleep(1000);//等待验证码加载出来
+        webDriver.switchTo().frame(webDriver.findElement(By.xpath("//*[@id=\"iframe\"]")));
+        //密码框填写
+        webDriver.findElement(By.xpath("/html/body/div/div[1]/div[3]/input")).sendKeys("535352535");
+        //登录
+        webDriver.findElement(By.xpath("/html/body/div/div[1]/div[4]/input")).click();
+        Thread.sleep(2000);//等待验证码加载出来
+
+
+        //截屏
+        WebElement oneElement = webDriver.findElement(By.xpath("//*[@id=\"scream\"]"));
+        File file = oneElement.getScreenshotAs(OutputType.FILE);
+
+        //移动图片到指定位置
+        FileUtils.copyFile(file, new File("D:\\filename", System.currentTimeMillis()+".png"));
+        webDriver.switchTo().defaultContent(); //回到原来页面
+
+
 
     }
 
