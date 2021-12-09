@@ -160,8 +160,8 @@ public class ImageCompare {
     {
         //ISO-8859-1
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        String imagePath1 = "D:\\image\\1.gif";
-        String imagePath2 = "D:\\image\\2.gif";
+        String imagePath1 = "D:\\image\\3.png";
+        String imagePath2 = "D:\\image\\4.png";
         ImageCompare imageCompare = new ImageCompare();
         imageCompare.CompareAndMarkDiff(imagePath1, imagePath2);
     }
