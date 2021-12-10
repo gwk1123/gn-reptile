@@ -129,6 +129,12 @@
 <!--            <version>2.1.0.RELEASE</version>-->
 <!--        </dependency>-->
 
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+
         <!--日志包-->
         <dependency>
             <groupId>org.codehaus.janino</groupId>
