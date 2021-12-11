@@ -15,7 +15,7 @@ public class JavaCV {
 
     public static void main(String[] args) {
         //图片地址
-        String imgUrl = "E:\\images\\12.jpg";
+        String imgUrl = "E:\\images\\test_3.jpg";
         //得到灰度图像
         getHuidu(imgUrl);
         //得到二值化处理图像

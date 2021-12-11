@@ -5,7 +5,7 @@ public class OcrCtrl {
     public static void main(String[] args){
 
         //原始验证码地址
-        String OriginalImg = "E:\\images\\12.jpg";
+        String OriginalImg = "E:\\images\\test_2.jpg";
         //识别样本输出地址
         String ocrResult = "E:\\images\\34.jpg";
         //去噪点

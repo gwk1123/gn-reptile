@@ -16,7 +16,10 @@ import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_THRESH_BINARY;
 
-public class DomeTest {
+/**
+ * 破解度不高(去除干扰线倒是可以)
+ */
+public class VerifyDome {
 
 
 
@@ -37,7 +40,7 @@ public class DomeTest {
         imwrite(binaryFileName, result);
 //        //去噪
         BufferedImage images = ImageIO.read(new File(binaryFileName));
-        BufferedImage changedImages = removeLine(images,3);
+        BufferedImage changedImages = removeLine(images,2);
         File removeLineImage = new File(fileObj.getParentFile().getAbsolutePath()+File.separator+fileObj.getName()+"_removeLine.png");
         System.out.println(removeLineImage);
         ImageIO.write(changedImages,"png", removeLineImage);
@@ -101,7 +104,7 @@ public class DomeTest {
 
     public static void main(String[] args) throws Exception {
         try {
-            File directory = new File("E:\\images\\12.jpg");
+            File directory = new File("E:\\images\\14.jpg");
             String code =   handleImage(directory.getAbsolutePath());
             System.out.println("编码:"+code);
         } catch (TesseractException | InterruptedException e) {
