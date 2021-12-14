@@ -136,22 +136,23 @@
         </dependency>
 
         <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacv</artifactId>
-            <version>1.5.4</version>
-        </dependency>
-        <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
             <version>3.1.0-1.2</version>
         </dependency>
 
-
+        <!--javacv基础包，包含javacv和javacpp，必须-->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacv</artifactId>
-            <version>1.4.1</version>
+            <version>1.5.4</version>
         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.bytedeco</groupId>-->
+<!--            <artifactId>javacv</artifactId>-->
+<!--            <version>1.4.1</version>-->
+<!--        </dependency>-->
 
         <!--日志包-->
         <dependency>

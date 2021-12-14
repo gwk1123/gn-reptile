@@ -14,9 +14,11 @@ import javax.imageio.ImageIO;
  *
  * java图像处理：灰度化，二值化，降噪，切割，裁剪，识别，找相似等  https://blog.csdn.net/wokuailewozihao/article/details/79742651
  *
+ * 图片灰度化变换
+ *
  */
 
-public class TestHUidu {
+public class GrayTransUtils {
 
     /**
      *  颜色分量转换为RGB值
