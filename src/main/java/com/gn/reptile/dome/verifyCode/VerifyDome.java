@@ -1,5 +1,6 @@
 package com.gn.reptile.dome.verifyCode;
 
+import com.gn.reptile.utils.Constants;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.bytedeco.javacpp.opencv_core;
@@ -11,6 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.bytedeco.javacpp.opencv_highgui.imshow;
+import static org.bytedeco.javacpp.opencv_highgui.waitKey;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
@@ -45,12 +48,19 @@ public class VerifyDome {
         System.out.println(removeLineImage);
         ImageIO.write(changedImages,"png", removeLineImage);
 
+        opencv_core.Mat imageMat = imread(removeLineImage.getAbsolutePath());
+        opencv_core.Mat blurMat = new opencv_core.Mat();
+        medianBlur(imageMat,blurMat,3); //中值过滤
+
+        String blurFileName = fileObj.getParentFile().getAbsolutePath()+File.separator+fileObj.getName()+"_blur.png";
+        imwrite(blurFileName, blurMat);
+
         //ocr 识别
-        Thread.sleep(2000);
+//        Thread.sleep(2000);
         Tesseract tesseract = new Tesseract();
         tesseract.setDatapath("src/main/resources/tessdata");
         tesseract.setLanguage("eng");
-        String code=  tesseract.doOCR(removeLineImage);
+        String code=  tesseract.doOCR(new File(blurFileName));
         return code;
     }
 
@@ -104,7 +114,8 @@ public class VerifyDome {
 
     public static void main(String[] args) throws Exception {
         try {
-            File directory = new File("E:\\images\\14.jpg");
+            String imagesPath = System.getProperty(Constants.images_path);
+            File directory = new File(imagesPath+"\\images\\12.jpg");
             String code =   handleImage(directory.getAbsolutePath());
             System.out.println("编码:"+code);
         } catch (TesseractException | InterruptedException e) {
