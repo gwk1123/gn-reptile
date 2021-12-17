@@ -52,8 +52,11 @@ public class VerifyDome {
         opencv_core.Mat blurMat = new opencv_core.Mat();
         medianBlur(imageMat,blurMat,3); //中值过滤
 
+        opencv_core.Mat blurMat1 = new opencv_core.Mat();
+        medianBlur(blurMat,blurMat1,3); //中值过滤
+
         String blurFileName = fileObj.getParentFile().getAbsolutePath()+File.separator+fileObj.getName()+"_blur.png";
-        imwrite(blurFileName, blurMat);
+        imwrite(blurFileName, blurMat1);
 
         //ocr 识别
 //        Thread.sleep(2000);
@@ -115,7 +118,7 @@ public class VerifyDome {
     public static void main(String[] args) throws Exception {
         try {
             String imagesPath = System.getProperty(Constants.images_path);
-            File directory = new File(imagesPath+"\\images\\12.jpg");
+            File directory = new File(imagesPath+"\\images\\14.jpg");
             String code =   handleImage(directory.getAbsolutePath());
             System.out.println("编码:"+code);
         } catch (TesseractException | InterruptedException e) {
