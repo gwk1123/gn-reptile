@@ -1,4 +1,4 @@
-package com.gn.reptile.rabbitmq.producer;
+package com.gn.reptile.rabbitmq.work.producer;
 
 import com.gn.reptile.utils.RabbitMqUtils;
 import com.rabbitmq.client.Channel;

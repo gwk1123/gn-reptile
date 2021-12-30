@@ -23,4 +23,17 @@ public class RabbitMqUtils {
         return channel;
     }
 
+    //得到一个连接的 Connection
+    public static Connection getConnection() throws Exception {
+        //创建一个连接工厂
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("192.168.3.129");
+        factory.setPort(5672);
+        factory.setUsername("admin");
+        factory.setPassword("admin");
+        factory.setVirtualHost("/vhost");
+        Connection connection = factory.newConnection();
+        return connection;
+    }
+
 }

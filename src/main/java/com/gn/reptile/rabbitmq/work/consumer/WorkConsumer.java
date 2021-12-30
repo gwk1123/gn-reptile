@@ -1,4 +1,4 @@
-package com.gn.reptile.rabbitmq.consumer;
+package com.gn.reptile.rabbitmq.work.consumer;
 
 import com.gn.reptile.utils.RabbitMqUtils;
 import com.rabbitmq.client.CancelCallback;
