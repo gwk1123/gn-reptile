@@ -21,6 +21,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static org.opencv.highgui.HighGui.imshow;
+import static org.opencv.highgui.HighGui.waitKey;
+
 /**
  * 测试可行 滑动验证码
  */
@@ -105,13 +108,23 @@ public class SlideCodeDome {
             // 转灰度图像
             Mat s_newMat = new Mat();
             Imgproc.cvtColor(s_mat, s_newMat, Imgproc.COLOR_BGR2GRAY);
+            imshow("hudu",s_newMat);
+            waitKey(0);
             // 二值化图像
             binaryzation(s_newMat);
             Imgcodecs.imwrite(sFile.getPath(), s_newMat);
+            imshow("er",s_newMat);
+            waitKey(0);
 
             int result_rows = b_mat.rows() - s_mat.rows() + 1;
             int result_cols = b_mat.cols() - s_mat.cols() + 1;
             Mat g_result = new Mat(result_rows, result_cols, CvType.CV_32FC1);
+            imshow("b_mat",b_mat);
+            waitKey(0);
+            imshow("s_mat",s_mat);
+            waitKey(0);
+            imshow("g_result",g_result);
+            waitKey(0);
             Imgproc.matchTemplate(b_mat, s_mat, g_result, Imgproc.TM_SQDIFF); // 归一化平方差匹配法
             // 归一化相关匹配法
             Core.normalize(g_result, g_result, 0, 1, Core.NORM_MINMAX, -1, new Mat());
