@@ -80,19 +80,19 @@ public class TransactionalConsumer {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (createChannel != null) {
-                    // 回滚。如果未异常会提交事务，此时回滚无影响
-                    createChannel.txRollback();
-                    createChannel.close();
-                }
-                if (newConnection != null) {
-                    newConnection.close();
-                }
-            } catch (Exception ignore) {
-                logger.error("关闭连接异常:{}", ignore);
-                // ignore
-            }
+//            try {
+//                if (createChannel != null) {
+//                    // 回滚。如果未异常会提交事务，此时回滚无影响
+//                    createChannel.txRollback();
+//                    createChannel.close();
+//                }
+//                if (newConnection != null) {
+//                    newConnection.close();
+//                }
+//            } catch (Exception ignore) {
+//                logger.error("关闭连接异常:{}", ignore);
+//                // ignore
+//            }
         }
     }
 
