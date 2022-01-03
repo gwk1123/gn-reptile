@@ -123,6 +123,7 @@ public class ConfirmProducer {
         channel.confirmSelect();//将信道置为confirm模式
         channel.addConfirmListener(new ConfirmListener() {
 
+            @Override
             public void handleNack(long deliveryTag, boolean multiple)
                     throws IOException {
                 if (multiple) {
@@ -132,6 +133,7 @@ public class ConfirmProducer {
                 }
             }
 
+            @Override
             public void handleAck(long deliveryTag, boolean multiple)
                     throws IOException {
                 //confirmSet.headSet(n)方法返回当前集合中小于n的集合
