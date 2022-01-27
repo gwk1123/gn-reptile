@@ -6,6 +6,8 @@ import com.rabbitmq.client.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 /**
  * https://www.cnblogs.com/qlqwjy/p/13934573.html
  */
@@ -13,7 +15,7 @@ public class TransactionalProducer {
 
     private static Logger logger = LoggerFactory.getLogger(TransactionalProducer.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         transactionalSend();
     }
@@ -21,7 +23,7 @@ public class TransactionalProducer {
     /**
      * 事务性消息发送
      */
-    public static void transactionalSend(){
+    public static void transactionalSend() throws IOException {
 
         Connection connection = null;
         Channel channel = null;
@@ -59,12 +61,13 @@ public class TransactionalProducer {
             // 提交事务
             channel.txCommit();
         } catch (Exception e) {
+            // 回滚
+            assert channel != null;
+            channel.txRollback();
             e.printStackTrace();
         } finally {
             try {
                 if (channel != null) {
-                    // 回滚。如果未异常会提交事务，此时回滚无影响
-                    channel.txRollback();
                     channel.close();
                 }
                 if (connection != null) {
