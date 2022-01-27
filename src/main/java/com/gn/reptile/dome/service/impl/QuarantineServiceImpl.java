@@ -1,11 +1,14 @@
 package com.gn.reptile.dome.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.gn.reptile.dome.manage.entity.Quarantine;
 import com.gn.reptile.dome.manage.service.QuarantineManageService;
 import com.gn.reptile.dome.service.QuarantineService;
-import org.apache.commons.io.FileUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,13 +20,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,7 +38,7 @@ import java.util.logging.Level;
 @Service
 public class QuarantineServiceImpl implements QuarantineService {
 
-    private Logger logger = LoggerFactory.getLogger(QuarantineServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(QuarantineServiceImpl.class);
 
     @Value("${google.driver.path}")
     private String path;
@@ -447,6 +447,143 @@ public class QuarantineServiceImpl implements QuarantineService {
             return this.num - o.num;
         }
     }
+
+
+
+    public static void main(String[] args) throws InterruptedException {
+        getWebsite1();
+    }
+
+
+
+    public static void getWebsite1() throws InterruptedException {
+
+        //调用chrome driver
+        System.setProperty("webdriver.chrome.driver", "D:/chromedriver/chromedriver_win32/chromedriver.exe");
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("headless"); //不弹出浏览器
+        //调用chrome
+        ChromeDriver driver = new ChromeDriver(chromeOptions);
+        //调整高度
+        driver.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        //获取网址
+        driver.get("https://www.news.gov.hk/chi/categories/covid19/index.html");
+
+        //下拉框的处理
+        String year_id = "record-year-filter";
+        Select year_sel = new Select(driver.findElementById(year_id));
+        List<WebElement> year_options = year_sel.getOptions();
+        for (WebElement option : year_options) {
+            System.out.println(option.getText());
+        }
+        WebElement yearSelectElm = driver.findElementById(year_id);
+        yearSelectElm.sendKeys("2021");
+
+        //下拉框的处理
+        String month_id = "record-month-filter";
+        Select month_sel = new Select(driver.findElementById(month_id));
+        List<WebElement> month_options = month_sel.getOptions();
+        for (WebElement option : month_options) {
+            System.out.println(option.getText());
+        }
+
+        WebElement monthSelectElm = driver.findElementById(month_id);
+        monthSelectElm.sendKeys("12月");
+
+        String search_id = "mobileTimeLineSearch";
+        System.out.println("点击搜索.....");
+        driver.findElementById(search_id).click();
+        Thread.sleep(4000);
+        List<String> titleHtmls = getPage( driver);
+        if(!CollectionUtils.isEmpty(titleHtmls)){
+            System.out.println("titleHtmls:"+JSON.toJSONString(titleHtmls));
+            titleHtmls.stream().filter(Objects::nonNull).forEach(htmlUrl ->{
+                extractContent( driver, htmlUrl);
+            });
+        }
+        //关闭driver
+        driver.close();
+    }
+
+    /**
+     * 分页
+     */
+    public static List<String> getPage(ChromeDriver driver) throws InterruptedException {
+
+        String next_class = "card-pager-next"; //下一页
+
+        String total_xp= "/html/body/main/section/div[2]/div[2]/span[2]"; //获取总页数
+        String totalStr = driver.findElement(By.xpath(total_xp)).getText();
+        Integer total = Integer.valueOf(totalStr.replaceAll("/","").replaceAll(" ",""));
+        System.out.println("total:"+total);
+
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        String currentStr= (String) jse.executeScript("return document.querySelector(\"input[name='page']\").value;");
+        Integer current = Integer.valueOf(currentStr);
+        System.out.println("current:"+current);
+
+        List<String> titleHtmls =new ArrayList<>();
+        for(int i=current;i<=total;i++ ){
+            logger.info("当前页:{},总页数:{}",i,total);
+            List<String> html =getHtml( driver);
+            titleHtmls.addAll(html);
+//            driver.findElement(By.className(next_class)).click();
+            WebElement element= driver.findElement(By.className(next_class));
+            driver.executeScript("arguments[0].click();", element);
+            Thread.sleep(3000);
+        }
+        return titleHtmls;
+    }
+
+
+    /**
+     * 获取每页中有多少资讯
+     * @param driver
+     * @return
+     * @throws InterruptedException
+     */
+    public static List<String> getHtml(ChromeDriver driver){
+        List<String> hrefs = new ArrayList<>();
+        String item_class = "news-item";
+        List<WebElement> elements = driver.findElements(By.className(item_class));
+        for (WebElement element : elements){
+            String href = element.findElement(By.linkText("全文")).getAttribute("href");
+            hrefs.add(href);
+        }
+        return hrefs;
+    }
+
+    /**
+     * 提取内容
+     */
+    public static void extractContent(ChromeDriver driver, String url) {
+        try {
+            driver.navigate().to(url);
+            Thread.sleep(4000);
+            String html = driver.getPageSource();
+//            System.out.println("html:" + html);
+            Document document = Jsoup.parse(html);
+
+            //标题
+            Element h1Element = document.select("div[class=row]").select("h1[class=news-title h4 font-weight-bold col-9 col-sm-10 col-xl-12 mb-0]").get(0);
+            String h1Title = h1Element.text();
+            System.out.println("h1Title:"+h1Title);
+
+            //发布日期
+            Element timeElement = document.select("div[class=d-flex flex-wrap mb-3]").select("span[class=align-middle news-date text-nowrap mr-3]").get(0);
+            String release_time = timeElement.text();
+            System.out.println("release_time:"+release_time);
+
+            List<Element> contentElements = document.select("div[class=newsdetail-content mt-3]");
+            contentElements.stream().filter(Objects::nonNull).forEach(element -> {
+                String contentStr = element.text();
+                System.out.println("contentStr:"+contentStr);
+            });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
 
